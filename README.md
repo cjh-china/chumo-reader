@@ -4,6 +4,8 @@
 
 不联网、不登录、不上传任何东西：书从本地导入，进度存在本地 JSON 里。
 
+**下载安装**：[ChumoReader-v1.0.0.apk](https://github.com/cjh-china/chumo-reader/releases/latest)（144 KB，Android 5.0+）。7.1 及以下需在系统设置里允许「未知来源」；包用项目脚本生成的本地密钥签名，出现「未知开发者」提示属正常。
+
 ## 特性
 
 **阅读器**
