@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FictionBook xmlns="http://www.gribuser.ru/xml/fictionbook/2.0">
+<description><title-info><book-title>北风</book-title>
+<author><first-name>阿</first-name><last-name>禾</last-name></author>
+</title-info></description>
+<body>
+<section><title><p>第一章 荒原</p></title>
+<p>风从北边来，带着沙。</p>
+<p>他把领口立起来，继续走。</p>
+</section>
+<section><title><p>第二章 井</p></title>
+<p>井口结着冰。</p>
+<p>他往下看，什么也看不见。</p>
+</section>
+</body></FictionBook>

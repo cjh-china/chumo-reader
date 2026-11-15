@@ -1,0 +1,21 @@
+# 构建产物
+build/
+.gradle/
+*.apk
+*.aab
+
+# 本机路径配置（build.py 会自动探测，不需要提交）
+local.properties
+
+# 签名密钥：首次运行 build.py 会自动生成，不要提交
+*.jks
+*.keystore
+
+# IDE / 系统
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# 会话工具数据
+.workbuddy/

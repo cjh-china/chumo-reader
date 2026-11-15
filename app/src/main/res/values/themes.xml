@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 基座主题：framework 原生 Material（API 21+），不依赖任何支持库 -->
+    <style name="Theme.ChumoReader" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/primary</item>
+        <item name="android:colorPrimaryDark">@color/primary_dark</item>
+        <item name="android:colorAccent">@color/primary</item>
+        <item name="android:windowBackground">@color/app_bg</item>
+        <item name="android:statusBarColor">@color/app_bg</item>
+        <item name="android:navigationBarColor">@color/app_bg</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:textColorHint">@color/text_tertiary</item>
+        <item name="android:windowActionModeOverlay">true</item>
+
+        <!-- 语义属性绑定 -->
+        <item name="appBg">@color/app_bg</item>
+        <item name="appCard">@color/app_card</item>
+        <item name="appSurface">@color/app_surface</item>
+        <item name="appTextPrimary">@color/text_primary</item>
+        <item name="appTextSecondary">@color/text_secondary</item>
+        <item name="appTextTertiary">@color/text_tertiary</item>
+        <item name="appDivider">@color/divider</item>
+        <item name="appAccent">@color/primary</item>
+        <item name="appAccentSoft">@color/accent_soft</item>
+        <item name="appIconTint">@color/icon_tint</item>
+        <item name="appScrim">@color/scrim</item>
+    </style>
+
+    <!-- 阅读页：底色由阅读主题在运行时接管，这里只保证启动瞬间不闪白 -->
+    <style name="Theme.ChumoReader.Reader" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/paper_warm</item>
+        <item name="android:statusBarColor">@color/paper_warm</item>
+        <item name="android:navigationBarColor">@color/paper_warm</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Reader</item>
+        <item name="android:textColorPrimary">@color/paper_warm_text</item>
+
+        <item name="appBg">@color/paper_warm</item>
+        <item name="appCard">@color/app_card</item>
+        <item name="appSurface">@color/app_surface</item>
+        <item name="appTextPrimary">@color/text_primary</item>
+        <item name="appTextSecondary">@color/text_secondary</item>
+        <item name="appTextTertiary">@color/text_tertiary</item>
+        <item name="appDivider">@color/divider</item>
+        <item name="appAccent">@color/primary</item>
+        <item name="appAccentSoft">@color/accent_soft</item>
+        <item name="appIconTint">@color/icon_tint</item>
+        <item name="appScrim">@color/scrim</item>
+    </style>
+
+    <style name="Animation.Reader" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/fade_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/hold</item>
+        <item name="android:activityCloseEnterAnimation">@anim/hold</item>
+        <item name="android:activityCloseExitAnimation">@anim/fade_out</item>
+    </style>
+
+    <!-- 自定义弹层：内容完全自绘，去系统内边距 -->
+    <style name="Theme.ChumoReader.Dialog" parent="android:Theme.Material.Light.Dialog.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimAmount">0.45</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="Theme.ChumoReader.Sheet" parent="android:Theme.Material.Light.Dialog.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimAmount">0.45</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Sheet</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="Animation.Sheet" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/sheet_in</item>
+        <item name="android:windowExitAnimation">@anim/sheet_out</item>
+    </style>
+
+    <!-- 文字样式 -->
+    <style name="Text.Title" parent="">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/appTextPrimary</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Text.Body" parent="">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">?attr/appTextPrimary</item>
+        <item name="android:lineSpacingExtra">4dp</item>
+    </style>
+
+    <style name="Text.Caption" parent="">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">?attr/appTextSecondary</item>
+    </style>
+</resources>

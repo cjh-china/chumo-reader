@@ -1,0 +1,18 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- 番茄红圆角底 -->
+    <path
+        android:fillColor="#FF5A2C"
+        android:pathData="M32,6 H76 A26,26 0 0 1 102,32 V76 A26,26 0 0 1 76,102 H32 A26,26 0 0 1 6,76 V32 A26,26 0 0 1 32,6 Z" />
+    <!-- 左页 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,40 L33,33 C29,31.8 26,34 26,38 V72 C26,75 28,77.2 31,78 L54,85 Z" />
+    <!-- 右页 -->
+    <path
+        android:fillColor="#FFF1EC"
+        android:pathData="M54,40 L75,33 C79,31.8 82,34 82,38 V72 C82,75 80,77.2 77,78 L54,85 Z" />
+</vector>

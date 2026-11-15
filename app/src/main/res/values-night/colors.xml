@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 深色模式：只覆盖语义色，主题结构与浅色完全一致 -->
+    <color name="app_bg">#121316</color>
+    <color name="app_card">#1C1E22</color>
+    <color name="app_surface">#26292E</color>
+    <color name="text_primary">#F2F3F5</color>
+    <color name="text_secondary">#A6ABB3</color>
+    <color name="text_tertiary">#727880</color>
+    <color name="divider">#2A2D33</color>
+    <color name="icon_tint">#A6ABB3</color>
+    <color name="scrim">#99000000</color>
+    <color name="accent_soft">#33211B</color>
+
+    <color name="brand_50">#3A211A</color>
+    <color name="brand_100">#4C2A1E</color>
+
+    <color name="success">#5FBF95</color>
+    <color name="warning">#E0A85C</color>
+    <color name="error">#E46868</color>
+</resources>

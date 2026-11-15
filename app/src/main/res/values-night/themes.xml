@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 深色模式：结构同浅色，仅换 parent 与状态栏图标色 -->
+    <style name="Theme.ChumoReader" parent="android:Theme.Material.NoActionBar">
+        <item name="android:colorPrimary">@color/primary</item>
+        <item name="android:colorPrimaryDark">@color/primary_dark</item>
+        <item name="android:colorAccent">@color/primary</item>
+        <item name="android:windowBackground">@color/app_bg</item>
+        <item name="android:statusBarColor">@color/app_bg</item>
+        <item name="android:navigationBarColor">@color/app_bg</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:textColorHint">@color/text_tertiary</item>
+        <item name="android:windowActionModeOverlay">true</item>
+
+        <item name="appBg">@color/app_bg</item>
+        <item name="appCard">@color/app_card</item>
+        <item name="appSurface">@color/app_surface</item>
+        <item name="appTextPrimary">@color/text_primary</item>
+        <item name="appTextSecondary">@color/text_secondary</item>
+        <item name="appTextTertiary">@color/text_tertiary</item>
+        <item name="appDivider">@color/divider</item>
+        <item name="appAccent">@color/primary</item>
+        <item name="appAccentSoft">@color/accent_soft</item>
+        <item name="appIconTint">@color/icon_tint</item>
+        <item name="appScrim">@color/scrim</item>
+    </style>
+
+    <style name="Theme.ChumoReader.Reader" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/paper_warm</item>
+        <item name="android:statusBarColor">@color/paper_warm</item>
+        <item name="android:navigationBarColor">@color/paper_warm</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Reader</item>
+
+        <item name="appBg">@color/paper_warm</item>
+        <item name="appCard">@color/app_card</item>
+        <item name="appSurface">@color/app_surface</item>
+        <item name="appTextPrimary">@color/text_primary</item>
+        <item name="appTextSecondary">@color/text_secondary</item>
+        <item name="appTextTertiary">@color/text_tertiary</item>
+        <item name="appDivider">@color/divider</item>
+        <item name="appAccent">@color/primary</item>
+        <item name="appAccentSoft">@color/accent_soft</item>
+        <item name="appIconTint">@color/icon_tint</item>
+        <item name="appScrim">@color/scrim</item>
+    </style>
+
+    <style name="Theme.ChumoReader.Dialog" parent="android:Theme.Material.Dialog.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimAmount">0.5</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="Theme.ChumoReader.Sheet" parent="android:Theme.Material.Dialog.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimAmount">0.5</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Sheet</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+</resources>
