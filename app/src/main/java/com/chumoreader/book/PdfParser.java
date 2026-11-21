@@ -14,7 +14,7 @@ public final class PdfParser {
     private PdfParser() {
     }
 
-    public static ParseResult parse(File f) throws Exception {
+    public static ParseResult parse(File f, String sourceName) throws Exception {
         ParcelFileDescriptor pfd = ParcelFileDescriptor.open(f, ParcelFileDescriptor.MODE_READ_ONLY);
         PdfRenderer renderer;
         try {
@@ -28,8 +28,13 @@ public final class PdfParser {
         }
         ParseResult r = new ParseResult();
         r.format = "PDF";
-        r.title = BookUtil.stripExt(f.getName());
+        r.title = BookUtil.titleOf(f, sourceName);
         r.pages = new PdfPages(renderer, pfd);
+        // 首页渲染成缩略图当封面，书架才不是一片渐变占位
+        try {
+            r.cover = r.pages.render(0, 640);
+        } catch (Exception ignored) {
+        }
         return r;
     }
 

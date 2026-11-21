@@ -22,7 +22,7 @@ public final class CbzParser {
     private CbzParser() {
     }
 
-    public static ParseResult parse(File f) throws Exception {
+    public static ParseResult parse(File f, String sourceName) throws Exception {
         ZipFile zip = new ZipFile(f);
         List<String> names = new ArrayList<>();
         Enumeration<? extends ZipEntry> en = zip.entries();
@@ -45,7 +45,7 @@ public final class CbzParser {
 
         ParseResult r = new ParseResult();
         r.format = "CBZ";
-        r.title = BookUtil.stripExt(f.getName());
+        r.title = BookUtil.titleOf(f, sourceName);
         r.pages = new ZipPages(zip, names);
         r.cover = r.pages.render(0, 640);
         return r;

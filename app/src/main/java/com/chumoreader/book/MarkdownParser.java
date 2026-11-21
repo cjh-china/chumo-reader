@@ -12,11 +12,11 @@ public final class MarkdownParser {
     private MarkdownParser() {
     }
 
-    public static ParseResult parse(File f) throws Exception {
+    public static ParseResult parse(File f, String sourceName) throws Exception {
         String text = IoUtil.decodeText(IoUtil.readBytes(f)).replace("\r\n", "\n").replace('\r', '\n');
         ParseResult r = new ParseResult();
         r.format = "MD";
-        r.title = BookUtil.stripExt(f.getName());
+        r.title = BookUtil.titleOf(f, sourceName);
 
         Chapter cur = null;
         StringBuilder para = new StringBuilder();

@@ -13,11 +13,11 @@ public final class HtmlBookParser {
     private HtmlBookParser() {
     }
 
-    public static ParseResult parse(File f) throws Exception {
+    public static ParseResult parse(File f, String sourceName) throws Exception {
         String html = IoUtil.decodeText(IoUtil.readBytes(f));
         ParseResult r = new ParseResult();
         r.format = "HTML";
-        r.title = BookUtil.stripExt(f.getName());
+        r.title = BookUtil.titleOf(f, sourceName);
 
         Matcher tm = Pattern.compile("<title[^>]*>(.*?)</title>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
                 .matcher(html);

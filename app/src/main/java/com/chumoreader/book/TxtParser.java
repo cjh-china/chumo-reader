@@ -33,7 +33,7 @@ public final class TxtParser {
     private static final int MAX_TITLE_LEN = 34;
     private static final int AUTO_SPLIT_CHARS = 6000;
 
-    public static ParseResult parse(File f) throws IOException {
+    public static ParseResult parse(File f, String sourceName) throws IOException {
         byte[] data = IoUtil.readBytes(f);
         String text = IoUtil.decodeText(data);
         text = text.replace("\r\n", "\n").replace('\r', '\n');
@@ -43,7 +43,7 @@ public final class TxtParser {
 
         ParseResult r = new ParseResult();
         r.format = "TXT";
-        r.title = BookUtil.stripExt(f.getName());
+        r.title = BookUtil.titleOf(f, sourceName);
         r.author = guessAuthor(text);
 
         List<int[]> marks = new ArrayList<>();   // {行起点, 标题结束位置}

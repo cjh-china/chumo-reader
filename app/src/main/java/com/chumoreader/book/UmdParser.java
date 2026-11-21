@@ -18,14 +18,14 @@ public final class UmdParser {
     private UmdParser() {
     }
 
-    public static ParseResult parse(File f) throws Exception {
+    public static ParseResult parse(File f, String sourceName) throws Exception {
         byte[] data = IoUtil.readBytes(f);
         if (data.length < 64) {
             throw new java.io.IOException("UMD 文件过小");
         }
         ParseResult r = new ParseResult();
         r.format = "UMD";
-        r.title = BookUtil.stripExt(f.getName());
+        r.title = BookUtil.titleOf(f, sourceName);
 
         StringBuilder sb = new StringBuilder();
         int i = 0;

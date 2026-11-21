@@ -13,11 +13,11 @@ public final class Fb2Parser {
     private Fb2Parser() {
     }
 
-    public static ParseResult parse(File f) throws Exception {
+    public static ParseResult parse(File f, String sourceName) throws Exception {
         String xml = IoUtil.decodeText(IoUtil.readBytes(f));
         ParseResult r = new ParseResult();
         r.format = "FB2";
-        r.title = BookUtil.stripExt(f.getName());
+        r.title = BookUtil.titleOf(f, sourceName);
 
         Matcher bt = Pattern.compile("<book-title\\b[^>]*>(.*?)</book-title>",
                 Pattern.CASE_INSENSITIVE | Pattern.DOTALL).matcher(xml);

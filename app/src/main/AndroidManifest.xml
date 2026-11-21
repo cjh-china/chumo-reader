@@ -10,6 +10,14 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!--
+        Android 11+ 的包可见性：不声明就查不到其它应用，
+        会把已安装的初墨播放器误判成「没装」。
+    -->
+    <queries>
+        <package android:name="com.chumosplayer" />
+    </queries>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

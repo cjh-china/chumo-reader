@@ -531,9 +531,10 @@ public class MusicPlayerActivity extends Activity implements MusicService.Listen
     @Override
     protected void onResume() {
         super.onResume();
+        // 服务可能还没创建，bind 会静默跳过，ticker 里还会继续补绑
+        MusicService.bind(this);
         MusicService s = MusicService.get();
         if (s != null) {
-            s.addListener(this);
             if (s.currentTrack() != null) {
                 showPlayer();
             } else {
@@ -561,10 +562,26 @@ public class MusicPlayerActivity extends Activity implements MusicService.Listen
         super.onPause();
     }
 
+    private int lastPlayIcon;
+
+    /** 播放状态可能与 View 就绪顺序错开，交给 ticker 兜底同步。 */
+    private void syncPlayIcon(MusicService s) {
+        if (playBtn == null) {
+            return;
+        }
+        int res = (s != null && s.isPlaying()) ? R.drawable.ic_pause : R.drawable.ic_play;
+        if (res != lastPlayIcon) {
+            lastPlayIcon = res;
+            playBtn.setImageResource(res);
+        }
+    }
+
     private final Runnable progressTick = new Runnable() {
         @Override
         public void run() {
+            MusicService.bind(MusicPlayerActivity.this);
             MusicService s = MusicService.get();
+            syncPlayIcon(s);
             if (s != null && s.currentTrack() != null && !seeking) {
                 int dur = s.duration();
                 int pos = s.position();
@@ -596,7 +613,7 @@ public class MusicPlayerActivity extends Activity implements MusicService.Listen
         showPlayer();
         titleView.setText(t.display());
         artistView.setText(t.artistOrUnknown());
-        playBtn.setImageResource(s.isPlaying() ? R.drawable.ic_pause : R.drawable.ic_play);
+        syncPlayIcon(s);
         refreshMode();
     }
 }

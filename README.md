@@ -20,6 +20,8 @@
 |---|---|---|---|
 | ![排版](docs/screenshots/typography.png) | ![夜间](docs/screenshots/night.png) | ![书城](docs/screenshots/store.png) | ![我的](docs/screenshots/mine.png) |
 
+![音乐播放](docs/screenshots/music.png)
+
 
 ## 特性
 
@@ -45,6 +47,7 @@
 - 扫描本地音频，迷你播放条常驻书架底部，可边读边听
 - 全屏播放页、播放列表、循环模式
 - 前台服务 + 媒体通知，切后台继续播
+- **装了「初墨播放器」（`com.chumosplayer`）时，音乐入口直接跳转到它**，不再用内置播放器；入口文案会随检测结果变化
 
 ## 支持的文件格式
 
@@ -111,6 +114,17 @@ tools/                       # 解析层桌面端测试设施、图标预览脚�
 - MOBI 只支持 PalmDOC 压缩且未加密的文件，HUFF/CDIC 与 DRM 会明确报错而不是静默出错
 - AZW3 按 KF8 文本块提取，复杂排版会退化成纯段落
 - **UI 只在模拟器验证过**（Android 14 / 1080×2340 / 440dpi），未在真机和 Android 5.0 设备上实测；小屏（如 720p）和超长屏机的排版数值可能仍需微调
+
+## 与「初墨播放器」联动
+
+内置播放器是给「没装别的播放器」的人用的兜底。如果设备上已经装了本人的另一个项目
+[初墨播放器](https://github.com/cjh-china)（包名 `com.chumosplayer`），书架、书城、我的三处音乐入口
+都会直接拉起它，避免同一台机器上存在两套音乐库和两份播放状态。
+
+- 检测走 `PackageManager.getLaunchIntentForPackage()`，Manifest 里声明了 `<queries>`，
+  否则 Android 11+ 的包可见性会让它误判成「没装」
+- 拉起失败（被停用、被卸载、无权限）会自动回退到内置播放器
+- 入口副标题会显示「已装初墨播放器，将直接打开」，不是静默跳走
 
 ## 致谢
 

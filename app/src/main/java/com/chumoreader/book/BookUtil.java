@@ -1,5 +1,6 @@
 package com.chumoreader.book;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,6 +119,18 @@ public final class BookUtil {
     }
 
     /** 去掉扩展名，作为书名兜底。 */
+    /**
+     * 书名。解析器拿到的 File 是书库内部的 {@code <id>.<ext>}，用它的名字当书名
+     * 会得到一串数字，所以导入方要把 SAF 的 DISPLAY_NAME 传进来。
+     */
+    public static String titleOf(File f, String sourceName) {
+        String n = sourceName;
+        if (n == null || n.trim().length() == 0) {
+            n = f == null ? "" : f.getName();
+        }
+        return stripExt(n.trim());
+    }
+
     public static String stripExt(String name) {
         if (name == null) {
             return "";

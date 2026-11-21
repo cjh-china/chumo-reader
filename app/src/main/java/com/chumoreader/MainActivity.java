@@ -314,6 +314,10 @@ public class MainActivity extends Activity implements ShelfPage.Host {
     }
 
     private void openMusic() {
+        // 装了初墨播放器就直接跳过去，省得两个播放器各存一份播放状态
+        if (com.chumoreader.music.ExternalPlayer.launch(this)) {
+            return;
+        }
         Intent i = new Intent(this, MusicPlayerActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(i);

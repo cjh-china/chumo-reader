@@ -68,6 +68,14 @@ public final class BookParser {
     }
 
     public static ParseResult parse(File file) throws Exception {
+        return parse(file, null);
+    }
+
+    /**
+     * @param sourceName 外部显示名（SAF 的 DISPLAY_NAME，含扩展名）。书库内部存的是
+     *                   {@code <id>.<ext>}，解析器不该用它当书名，所以由导入方传进来。
+     */
+    public static ParseResult parse(File file, String sourceName) throws Exception {
         if (file == null || !file.exists() || file.length() == 0) {
             throw new java.io.IOException("文件不存在或为空");
         }
@@ -75,47 +83,47 @@ public final class BookParser {
         ParseResult r;
         switch (ext) {
             case "epub":
-                r = EpubParser.parse(file);
+                r = EpubParser.parse(file, sourceName);
                 break;
             case "html":
             case "htm":
             case "xhtml":
-                r = HtmlBookParser.parse(file);
+                r = HtmlBookParser.parse(file, sourceName);
                 break;
             case "umd":
-                r = UmdParser.parse(file);
+                r = UmdParser.parse(file, sourceName);
                 break;
             case "mobi":
             case "azw":
             case "azw3":
             case "prc":
-                r = MobiParser.parse(file);
+                r = MobiParser.parse(file, sourceName);
                 break;
             case "fb2":
-                r = Fb2Parser.parse(file);
+                r = Fb2Parser.parse(file, sourceName);
                 break;
             case "pdf":
-                r = PdfParser.parse(file);
+                r = PdfParser.parse(file, sourceName);
                 break;
             case "cbz":
-                r = CbzParser.parse(file);
+                r = CbzParser.parse(file, sourceName);
                 break;
             case "docx":
-                r = DocxParser.parse(file);
+                r = DocxParser.parse(file, sourceName);
                 break;
             case "md":
             case "markdown":
-                r = MarkdownParser.parse(file);
+                r = MarkdownParser.parse(file, sourceName);
                 break;
             case "rtf":
-                r = RtfParser.parse(file);
+                r = RtfParser.parse(file, sourceName);
                 break;
             default:
-                r = TxtParser.parse(file);
+                r = TxtParser.parse(file, sourceName);
                 break;
         }
         if (r.title == null || r.title.trim().length() == 0) {
-            r.title = stripExt(file.getName());
+            r.title = BookUtil.titleOf(file, sourceName);
         }
         if (r.chapters.isEmpty() && r.pages == null) {
             throw new java.io.IOException("没有解析到正文内容");

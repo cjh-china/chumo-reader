@@ -483,6 +483,17 @@ public class MusicService extends Service {
 
     // ---------------- 状态分发 ----------------
 
+    /**
+     * 服务是 startService 异步拉起的，Activity/View 就绪时它可能还没创建。
+     * 用这个入口就无需判空，绑不上也无害，下次刷新时再试即可。
+     */
+    public static void bind(Listener l) {
+        MusicService s = get();
+        if (s != null) {
+            s.addListener(l);
+        }
+    }
+
     public void addListener(Listener l) {
         if (l != null && !listeners.contains(l)) {
             listeners.add(l);

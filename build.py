@@ -85,8 +85,8 @@ APKSIGNER = os.path.join(BT, "apksigner.bat")
 JAVAC = os.path.join(JAVA_HOME, "bin", "javac.exe")
 KEYTOOL = os.path.join(JAVA_HOME, "bin", "keytool.exe")
 
-VERSION_CODE = "2"
-VERSION_NAME = "1.0.1"
+VERSION_CODE = "3"
+VERSION_NAME = "1.0.2"
 
 
 def run(cmd, **kw):

@@ -49,7 +49,7 @@ public final class Importer {
 
         ParseResult r;
         try {
-            r = BookParser.parse(dest);
+            r = BookParser.parse(dest, name);
         } catch (Exception e) {
             //noinspection ResultOfMethodCallIgnored
             dest.delete();
@@ -58,6 +58,10 @@ public final class Importer {
 
         if (r.title != null && r.title.trim().length() > 0) {
             b.title = r.title.trim();
+        }
+        // 兜底：解析器若拿到的还是内部文件名（<id>），改用导入时的外部名
+        if (b.title == null || b.title.trim().length() == 0 || b.title.trim().equals(b.id)) {
+            b.title = BookUtil.stripExt(name);
         }
         b.author = r.author;
         b.chars = r.totalChars();

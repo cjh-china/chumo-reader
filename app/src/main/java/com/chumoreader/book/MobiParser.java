@@ -18,7 +18,7 @@ public final class MobiParser {
     private MobiParser() {
     }
 
-    public static ParseResult parse(File f) throws Exception {
+    public static ParseResult parse(File f, String sourceName) throws Exception {
         byte[] data = IoUtil.readBytes(f);
         if (data.length < 128) {
             throw new java.io.IOException("MOBI 文件过小");
@@ -84,7 +84,7 @@ public final class MobiParser {
 
         ParseResult r = new ParseResult();
         r.format = "MOBI";
-        r.title = BookUtil.stripExt(f.getName());
+        r.title = BookUtil.titleOf(f, sourceName);
 
         List<Block> blocks = HtmlText.toBlocks(html);
         if (blocks.isEmpty()) {

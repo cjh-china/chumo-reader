@@ -198,7 +198,9 @@ public class MinePage extends LinearLayout {
                     }
                 }));
         card.addView(Menus.divider(c, Ui.attrColor(c, R.attr.appDivider)));
-        card.addView(Menus.row(c, R.drawable.ic_music, "本地音乐", "边读边听，后台播放",
+        boolean extPlayer = com.chumoreader.music.ExternalPlayer.isInstalled(c);
+        card.addView(Menus.row(c, R.drawable.ic_music, "本地音乐",
+                extPlayer ? "已装初墨播放器，将直接打开" : "边读边听，后台播放",
                 text, sub, accent, true, v -> {
                     if (host != null) {
                         host.onOpenMusic();
@@ -212,7 +214,7 @@ public class MinePage extends LinearLayout {
                     }
                 }));
         card.addView(Menus.divider(c, Ui.attrColor(c, R.attr.appDivider)));
-        card.addView(Menus.row(c, R.drawable.ic_person, "关于初墨阅读", "版本 1.0.0",
+        card.addView(Menus.row(c, R.drawable.ic_person, "关于初墨阅读", "版本 " + versionName(c),
                 text, sub, sub, true, v -> {
                     if (host != null) {
                         host.onOpenAbout();
@@ -226,8 +228,18 @@ public class MinePage extends LinearLayout {
         return wrap;
     }
 
+    /** 版本号从包信息读，避免每发一版都要手改文案。 */
+    private static String versionName(Context c) {
+        try {
+            String v = c.getPackageManager().getPackageInfo(c.getPackageName(), 0).versionName;
+            return v == null ? "" : v;
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
     private View buildFooter() {
-        TextView t = Menus.text(c, "初墨阅读 · 1.0.0\n所有内容都留在这台设备上", 11,
+        TextView t = Menus.text(c, "初墨阅读 · " + versionName(c) + "\n所有内容都留在这台设备上", 11,
                 Ui.attrColor(c, R.attr.appTextTertiary), false);
         t.setGravity(Gravity.CENTER);
         t.setLineSpacing(Ui.dpf(c, 4), 1f);

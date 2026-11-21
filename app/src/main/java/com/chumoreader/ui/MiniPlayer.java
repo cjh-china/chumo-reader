@@ -132,10 +132,7 @@ public class MiniPlayer extends LinearLayout implements MusicService.Listener {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         attached = true;
-        MusicService s = MusicService.get();
-        if (s != null) {
-            s.addListener(this);
-        }
+        MusicService.bind(this);
         refresh();
     }
 
@@ -155,10 +152,12 @@ public class MiniPlayer extends LinearLayout implements MusicService.Listener {
     }
 
     public void refresh() {
+        MusicService.bind(this);
         MusicService s = MusicService.get();
         Track t = s == null ? null : s.currentTrack();
         if (t == null) {
             setVisibility(GONE);
+            armTick(s);
             return;
         }
         setVisibility(VISIBLE);
@@ -174,9 +173,14 @@ public class MiniPlayer extends LinearLayout implements MusicService.Listener {
             lp.width = (int) (parent.getWidth() * p);
             progressFill.setLayoutParams(lp);
         }
+        armTick(s);
+    }
+
+    /** 播放中 600ms 一次；未播放时低频重试，用来兜住服务晚于视图创建的情况。 */
+    private void armTick(MusicService s) {
         removeCallbacks(tick);
-        if (attached && s.isPlaying()) {
-            postDelayed(tick, 600);
+        if (attached) {
+            postDelayed(tick, s != null && s.isPlaying() ? 600 : 1500);
         }
     }
 

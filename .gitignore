@@ -19,3 +19,6 @@ Thumbs.db
 
 # 会话工具数据
 .workbuddy/
+
+# 音频测试样本用 ffmpeg 现生成，见 tools/make_samples.py
+tools/samples/tone30.mp3

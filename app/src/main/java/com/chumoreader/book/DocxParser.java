@@ -21,7 +21,7 @@ public final class DocxParser {
     private static final Pattern BR = Pattern.compile("<w:(?:br|cr)\\b[^>]*/?>");
     private static final Pattern TAB = Pattern.compile("<w:tab\\b[^>]*/?>");
 
-    public static ParseResult parse(File f) throws Exception {
+    public static ParseResult parse(File f, String sourceName) throws Exception {
         ZipFile zip = new ZipFile(f);
         try {
             ZipEntry e = zip.getEntry("word/document.xml");
@@ -39,7 +39,7 @@ public final class DocxParser {
 
             ParseResult r = new ParseResult();
             r.format = "DOCX";
-            r.title = BookUtil.stripExt(f.getName());
+            r.title = BookUtil.titleOf(f, sourceName);
 
             List<Block> blocks = new ArrayList<>();
             Matcher m = P.matcher(xml);

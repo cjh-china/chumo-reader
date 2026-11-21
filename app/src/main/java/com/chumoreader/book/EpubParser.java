@@ -39,12 +39,12 @@ public final class EpubParser {
     private static final Pattern TITLE_TAG = Pattern.compile(
             "<title\\b[^>]*>(.*?)</title>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
-    public static ParseResult parse(File f) throws Exception {
+    public static ParseResult parse(File f, String sourceName) throws Exception {
         ZipFile zip = new ZipFile(f);
         try {
             ParseResult r = new ParseResult();
             r.format = "EPUB";
-            r.title = BookUtil.stripExt(f.getName());
+            r.title = BookUtil.titleOf(f, sourceName);
 
             String opfPath = findOpf(zip);
             if (opfPath == null) {

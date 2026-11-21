@@ -308,7 +308,11 @@ public class StorePage extends LinearLayout {
         left.setOrientation(VERTICAL);
         TextView t = Menus.text(c, "边读边听", 15, 0xFFFFFFFF, true);
         left.addView(t);
-        TextView s = Menus.text(c, "本地音乐库，阅读时后台播放", 11.5f, 0xB3FFFFFF, false);
+        TextView s = Menus.text(c,
+                com.chumoreader.music.ExternalPlayer.isInstalled(c)
+                        ? "已装初墨播放器，点击直接打开"
+                        : "本地音乐库，阅读时后台播放",
+                11.5f, 0xB3FFFFFF, false);
         LinearLayout.LayoutParams slp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         slp.topMargin = Ui.dp(c, 4);

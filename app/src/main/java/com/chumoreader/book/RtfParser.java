@@ -21,12 +21,12 @@ public final class RtfParser {
             "listoverridetable", "themedata", "colorschememapping", "latentstyles", "datastore",
             "generator", "xmlnstbl", "rsidtbl", "filetbl", "revtbl", "pnseclvl", "listtext"));
 
-    public static ParseResult parse(File f) throws Exception {
+    public static ParseResult parse(File f, String sourceName) throws Exception {
         String src = new String(IoUtil.readBytes(f), Charset.forName("ISO-8859-1"));
         String text = extract(src);
         ParseResult r = new ParseResult();
         r.format = "RTF";
-        r.title = BookUtil.stripExt(f.getName());
+        r.title = BookUtil.titleOf(f, sourceName);
 
         List<Block> blocks = new ArrayList<>();
         Chapter cur = null;
