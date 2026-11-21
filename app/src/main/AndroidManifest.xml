@@ -16,6 +16,10 @@
     -->
     <queries>
         <package android:name="com.chumosplayer" />
+        <!-- 听书：把当前页文字交给初墨播放器的「文本转音频」（v2.2.0+） -->
+        <intent>
+            <action android:name="com.chumosplayer.action.SPEAK_TEXT" />
+        </intent>
     </queries>
 
     <application

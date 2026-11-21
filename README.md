@@ -4,7 +4,7 @@
 
 不联网、不登录、不上传任何东西：书从本地导入，进度存在本地 JSON 里。
 
-**下载安装**：[ChumoReader-v1.0.1.apk](https://github.com/cjh-china/chumo-reader/releases/latest)（145 KB，Android 5.0+）。7.1 及以下需在系统设置里允许「未知来源」；包用项目脚本生成的本地密钥签名，出现「未知开发者」提示属正常。
+**下载安装**：[ChumoReader-v1.0.4.apk](https://github.com/cjh-china/chumo-reader/releases/latest)（约 144 KB，Android 5.0+）。7.1 及以下需在系统设置里允许「未知来源」；包用项目脚本生成的本地密钥签名，出现「未知开发者」提示属正常。
 
 > v1.0.0 存在一处必崩缺陷（无封面的书会触发 `LruCache.get(null)`），请使用 v1.0.1 及以上。
 
@@ -148,6 +148,20 @@ tools/                       # 解析层桌面端测试设施、图标预览脚�
   否则 Android 11+ 的包可见性会让它误判成「没装」
 - 拉起失败（被停用、被卸载、无权限）会自动回退到内置播放器
 - 入口副标题会显示「已装初墨播放器，将直接打开」，不是静默跳走
+
+### 「听书」也交给它
+
+阅读页底栏第三个按钮在检测到初墨播放器后会变成「初墨朗读」：点下去把**当前页正文**交给播放器的
+「文本转音频」（v2.2.0 起的对外 Intent 接口），由它合成 WAV 播放，曲目标题是「书名 · 章节名」。
+
+![听书交给初墨](docs/screenshots/tts-handoff.png)
+
+- 契约：`com.chumosplayer.action.SPEAK_TEXT` + `com.chumosplayer.extra.TEXT` + `com.chumosplayer.extra.TITLE` + `AUTO_PLAY=true`
+- 先按显式组件 `com.chumosplayer/.TextToAudioActivity` 拉起，组件名对不上再退回隐式 Intent
+- 没装播放器时按钮仍是「听书」，走内置 `TextToSpeech`，行为不变
+- `<queries>` 里同时声明了包名与这条 action，Android 11+ 才查得到
+- 文本只在两个 App 之间传递，WAV 落在播放器自己的私有目录，阅读器不碰存储也不申请权限
+- 合成依赖设备系统 TTS 引擎：模拟器自带的 Pico 没有中文语音，只会产出 0.2 秒静音，真机上才有声
 
 ## 致谢
 

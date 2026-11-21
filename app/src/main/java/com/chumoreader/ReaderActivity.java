@@ -33,6 +33,7 @@ import com.chumoreader.book.ParseResult;
 import com.chumoreader.data.Book;
 import com.chumoreader.data.Library;
 import com.chumoreader.data.Prefs;
+import com.chumoreader.music.ExternalPlayer;
 import com.chumoreader.ui.Menus;
 import com.chumoreader.ui.ReaderTheme;
 import com.chumoreader.ui.ReaderView;
@@ -254,7 +255,10 @@ public class ReaderActivity extends Activity implements ReaderView.Callback {
 
         tools.addView(toolItem("目录", R.drawable.ic_list, main, v -> showDrawer()));
         tools.addView(toolItem("亮度", R.drawable.ic_bright, main, v -> showBrightSheet()));
-        tools.addView(toolItem("听书", R.drawable.ic_headphone, main, v -> toggleTts()));
+        // 装了初墨播放器时，这个按钮点下去是把本页交给它朗读，标签也直说
+        boolean hasPlayer = ExternalPlayer.isInstalled(this);
+        tools.addView(toolItem(hasPlayer ? "初墨朗读" : "听书",
+                R.drawable.ic_headphone, main, v -> toggleTts()));
         tools.addView(toolItem("字体", R.drawable.ic_font, main, v -> showTypeSheet()));
 
         nightBtn = toolItem("夜间", R.drawable.ic_night,
@@ -946,6 +950,11 @@ public class ReaderActivity extends Activity implements ReaderView.Callback {
             Ui.toast(this, "本页没有可朗读的文字");
             return;
         }
+        // 装了初墨播放器就交给它的「文本转音频」：能后台播、能调语速音调、能进播放队列
+        if (ExternalPlayer.speak(this, text.trim(), ttsTitle())) {
+            showChapterToast("已交给初墨朗读本页");
+            return;
+        }
         if (tts == null) {
             tts = new TextToSpeech(this, status -> {
                 ttsReady = status == TextToSpeech.SUCCESS;
@@ -962,6 +971,16 @@ public class ReaderActivity extends Activity implements ReaderView.Callback {
         } else {
             Ui.toast(this, "语音引擎还在准备");
         }
+    }
+
+    /** 交给播放器时用的曲目标题：「书名 · 章节名」，缺一个就用另一个 */
+    private String ttsTitle() {
+        String name = book.title == null ? "" : book.title.trim();
+        String chapter = reader.chapterTitle() == null ? "" : reader.chapterTitle().trim();
+        if (name.length() == 0) {
+            return chapter;
+        }
+        return chapter.length() == 0 ? name : name + " · " + chapter;
     }
 
     private void speakNow(String text) {
