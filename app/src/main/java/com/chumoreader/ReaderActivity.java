@@ -391,7 +391,8 @@ public class ReaderActivity extends Activity implements ReaderView.Callback {
                 if (f == null || !f.exists()) {
                     throw new java.io.IOException("书籍文件已丢失");
                 }
-                r = BookParser.parse(f);
+                // 书名以书库记录为准：书籍副本在库里的文件名是 id，解析器不能拿它当书名
+                r = BookParser.parse(f, book.title);
             } catch (Exception e) {
                 err = e.getMessage() == null ? "解析失败" : e.getMessage();
             }
@@ -410,7 +411,13 @@ public class ReaderActivity extends Activity implements ReaderView.Callback {
                     return;
                 }
                 content = result;
-                titleView.setText(result.title == null ? book.title : result.title);
+                // 解析结果里的书名可能来自库内文件名（一串数字 id），此时回落到书库书名
+                String parsedTitle = result.title == null ? "" : result.title.trim();
+                if (parsedTitle.isEmpty() || parsedTitle.equals(book.id)) {
+                    parsedTitle = book.title;
+                }
+                book.title = parsedTitle;
+                titleView.setText(parsedTitle == null ? "" : parsedTitle);
                 book.chapterCount = result.isImageMode() ? result.pages.count() : result.chapters.size();
                 drawerTitle.setText("共 " + book.chapterCount + " 章 · 已读 "
                         + Math.round(book.progress * 100) + "%");

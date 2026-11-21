@@ -152,7 +152,7 @@ public class CoverView extends View {
         canvas.drawCircle(w * 0.86f, h * 0.13f, w * 0.20f, paint);
         paint.setStyle(Paint.Style.FILL);
 
-        drawVerticalTitle(canvas, w, h);
+        drawTitle(canvas, w, h);
 
         // 底部格式标签
         if (format.length() > 0 && format.length() <= 5) {
@@ -163,7 +163,74 @@ public class CoverView extends View {
         }
     }
 
-    /** 竖排书名：从右侧往左，最多 7 列，每列 12 字。 */
+    /** 中文书名竖排（书脊感），西文书名横排——逐字竖排英文会变成一列乱码。 */
+    private void drawTitle(Canvas canvas, int w, int h) {
+        if (isCjkTitle(title)) {
+            drawVerticalTitle(canvas, w, h);
+        } else {
+            drawHorizontalTitle(canvas, w, h);
+        }
+    }
+
+    /** 汉字（含标点）占多数才竖排；纯英文/数字/西文一律横排 */
+    private boolean isCjkTitle(String s) {
+        if (s == null) {
+            return false;
+        }
+        int cjk = 0, latin = 0;
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            if (ch >= 0x4E00 && ch <= 0x9FFF || ch >= 0x3400 && ch <= 0x4DBF) {
+                cjk++;
+            } else if (ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z' || ch >= '0' && ch <= '9') {
+                latin++;
+            }
+        }
+        return cjk > 0 && cjk >= latin;
+    }
+
+    /** 西文书名：左对齐换行，最多 3 行，超出用省略号 */
+    private void drawHorizontalTitle(Canvas canvas, int w, int h) {
+        String t = title.replaceAll("\\s+", " ").trim();
+        if (t.length() == 0) {
+            return;
+        }
+        float size = w * 0.135f;
+        float maxW = w * 0.70f;
+        float x = w * 0.17f;
+        float y = h * 0.34f;
+        float lh = size * 1.34f;
+        int maxLines = 3;
+
+        textPaint.setColor(0xF2FFFFFF);
+        textPaint.setTextSize(size);
+        textPaint.setFakeBoldText(true);
+        textPaint.setTextAlign(Paint.Align.LEFT);
+        textPaint.setShadowLayer(w * 0.02f, 0, w * 0.012f, 0x55000000);
+
+        String rest = t;
+        for (int line = 0; line < maxLines && rest.length() > 0; line++) {
+            int n = textPaint.breakText(rest, true, maxW, null);
+            if (n <= 0) {
+                break;
+            }
+            boolean last = line == maxLines - 1;
+            String chunk = rest.substring(0, n);
+            if (last && n < rest.length()) {
+                chunk = chunk.length() > 1
+                        ? chunk.substring(0, chunk.length() - 1) + "…" : "…";
+            }
+            canvas.drawText(chunk, x, y, textPaint);
+            rest = rest.substring(n).trim();
+            y += lh;
+        }
+
+        textPaint.setShadowLayer(0, 0, 0, 0);
+        textPaint.setFakeBoldText(false);
+        drawAuthor(canvas, w, h, false);
+    }
+
+    /** 竖排书名：从右侧往左，最多 2 列，每列 12 字。 */
     private void drawVerticalTitle(Canvas canvas, int w, int h) {
         String t = title.replaceAll("\\s+", "").trim();
         if (t.length() == 0) {
@@ -195,12 +262,19 @@ public class CoverView extends View {
         textPaint.setShadowLayer(0, 0, 0, 0);
         textPaint.setFakeBoldText(false);
 
-        if (author != null && author.length() > 0) {
-            textPaint.setTextSize(w * 0.095f);
-            textPaint.setColor(0xAAFFFFFF);
-            String a = author.length() > 8 ? author.substring(0, 8) : author;
-            canvas.drawText(a, w * 0.30f, h * 0.26f, textPaint);
+        drawAuthor(canvas, w, h, true);
+    }
+
+    private void drawAuthor(Canvas canvas, int w, int h, boolean vertical) {
+        if (author == null || author.length() == 0) {
+            return;
         }
+        textPaint.setTextSize(w * 0.095f);
+        textPaint.setColor(0xAAFFFFFF);
+        textPaint.setFakeBoldText(false);
+        textPaint.setTextAlign(vertical ? Paint.Align.CENTER : Paint.Align.LEFT);
+        String a = author.length() > 8 ? author.substring(0, 8) : author;
+        canvas.drawText(a, vertical ? w * 0.30f : w * 0.17f, vertical ? h * 0.26f : h * 0.24f, textPaint);
     }
 
     @Override
