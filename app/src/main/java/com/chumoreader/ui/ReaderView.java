@@ -103,6 +103,10 @@ public class ReaderView extends View {
     private Bitmap pageBitmap;
     private int imagePage;
 
+    // 上下栏占位（dp），菜单弹出时正文让位，避免被浮层压住
+    private int menuExtraTop;
+    private int menuExtraBottom;
+
     private final Runnable longPressRunnable = new Runnable() {
         @Override
         public void run() {
@@ -311,8 +315,8 @@ public class ReaderView extends View {
             return;
         }
         padH = Ui.dp(getContext(), 22);
-        padTop = Ui.dp(getContext(), 42);
-        padBottom = Ui.dp(getContext(), 34);
+        padTop = Ui.dp(getContext(), 42 + menuExtraTop);
+        padBottom = Ui.dp(getContext(), 34 + menuExtraBottom);
         footerH = Ui.dp(getContext(), 22);
         contentW = Math.max(1, w - padH * 2);
         contentH = Math.max(1, h - padTop - padBottom - footerH);
@@ -322,6 +326,28 @@ public class ReaderView extends View {
             gotoChar(keep);
         }
         requestImage();
+    }
+
+    /** 上下栏出现/隐藏时调整正文区域，保持当前阅读位置。 */
+    public void applyMenuInsets(boolean visible) {
+        int extraTop = visible ? 46 : 0;
+        int extraBottom = visible ? 100 : 0;
+        if (extraTop == menuExtraTop && extraBottom == menuExtraBottom) {
+            return;
+        }
+        menuExtraTop = extraTop;
+        menuExtraBottom = extraBottom;
+        int keep = currentCharOffset();
+        padTop = Ui.dp(getContext(), 42 + menuExtraTop);
+        padBottom = Ui.dp(getContext(), 34 + menuExtraBottom);
+        contentW = Math.max(1, getWidth() - padH * 2);
+        contentH = Math.max(1, getHeight() - padTop - padBottom - footerH);
+        if (mode == MODE_TEXT && book != null) {
+            buildLayout();
+            gotoChar(keep);
+        }
+        requestImage();
+        invalidate();
     }
 
     public void setPaddingDp(int h, int top, int bottom) {

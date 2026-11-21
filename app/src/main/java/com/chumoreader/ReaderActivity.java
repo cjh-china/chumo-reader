@@ -438,12 +438,14 @@ public class ReaderActivity extends Activity implements ReaderView.Callback {
             bottomBar.setAlpha(0f);
             topBar.animate().alpha(1f).setDuration(180).start();
             bottomBar.animate().alpha(1f).setDuration(180).start();
+            reader.applyMenuInsets(true);
             updateMenuState();
         } else {
             topBar.animate().alpha(0f).setDuration(140).withEndAction(() ->
                     topBar.setVisibility(View.GONE)).start();
             bottomBar.animate().alpha(0f).setDuration(140).withEndAction(() ->
                     bottomBar.setVisibility(View.GONE)).start();
+            reader.applyMenuInsets(false);
         }
     }
 

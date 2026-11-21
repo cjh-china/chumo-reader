@@ -85,8 +85,8 @@ APKSIGNER = os.path.join(BT, "apksigner.bat")
 JAVAC = os.path.join(JAVA_HOME, "bin", "javac.exe")
 KEYTOOL = os.path.join(JAVA_HOME, "bin", "keytool.exe")
 
-VERSION_CODE = "1"
-VERSION_NAME = "1.0.0"
+VERSION_CODE = "2"
+VERSION_NAME = "1.0.1"
 
 
 def run(cmd, **kw):
@@ -147,13 +147,21 @@ def prepare_manifest():
 
 
 def main():
-    variant = sys.argv[1] if len(sys.argv) > 1 else "debug"
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    flags = [a for a in sys.argv[1:] if a.startswith("--")]
+    variant = args[0] if args else "debug"
     for p in (AAPT2, PLATFORM, JAVAC):
         if not os.path.exists(p):
             raise SystemExit("缺少构建工具：%s" % p)
 
-    print("[1/6] 清理")
-    clean()
+    if "--no-clean" in flags:
+        # 只改了几行代码时跳过清理：javac 会覆盖同名 class，省掉整目录重建
+        print("[1/6] 跳过清理（--no-clean）")
+        for d in (GEN, CLASSES, DEX):
+            os.makedirs(d, exist_ok=True)
+    else:
+        print("[1/6] 清理")
+        clean()
 
     print("[2/6] 编译资源")
     res_zip = os.path.join(BUILD, "res.zip")

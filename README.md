@@ -4,7 +4,22 @@
 
 不联网、不登录、不上传任何东西：书从本地导入，进度存在本地 JSON 里。
 
-**下载安装**：[ChumoReader-v1.0.0.apk](https://github.com/cjh-china/chumo-reader/releases/latest)（144 KB，Android 5.0+）。7.1 及以下需在系统设置里允许「未知来源」；包用项目脚本生成的本地密钥签名，出现「未知开发者」提示属正常。
+**下载安装**：[ChumoReader-v1.0.1.apk](https://github.com/cjh-china/chumo-reader/releases/latest)（145 KB，Android 5.0+）。7.1 及以下需在系统设置里允许「未知来源」；包用项目脚本生成的本地密钥签名，出现「未知开发者」提示属正常。
+
+> v1.0.0 存在一处必崩缺陷（无封面的书会触发 `LruCache.get(null)`），请使用 v1.0.1 及以上。
+
+## 截图
+
+以下均来自 Android 14 模拟器（Pixel 5 规格，1080×2340 / 440dpi）实机运行：
+
+| 书架 | 阅读 | 呼出菜单 | 目录 |
+|---|---|---|---|
+| ![书架](docs/screenshots/shelf.png) | ![阅读](docs/screenshots/reader.png) | ![菜单](docs/screenshots/reader-menu.png) | ![目录](docs/screenshots/toc.png) |
+
+| 排版面板 | 夜间模式 | 书城 | 我的 |
+|---|---|---|---|
+| ![排版](docs/screenshots/typography.png) | ![夜间](docs/screenshots/night.png) | ![书城](docs/screenshots/store.png) | ![我的](docs/screenshots/mine.png) |
+
 
 ## 特性
 
@@ -95,7 +110,7 @@ tools/                       # 解析层桌面端测试设施、图标预览脚�
 - PDF / CBZ 是位图渲染，不能重排文字，也不支持划词与朗读
 - MOBI 只支持 PalmDOC 压缩且未加密的文件，HUFF/CDIC 与 DRM 会明确报错而不是静默出错
 - AZW3 按 KF8 文本块提取，复杂排版会退化成纯段落
-- **UI 尚未在真机/模拟器验证过**（开发环境无设备、无 AVD），排版数值是按 8dp 网格与常见屏幕推算的，个别机型可能仍需微调
+- **UI 只在模拟器验证过**（Android 14 / 1080×2340 / 440dpi），未在真机和 Android 5.0 设备上实测；小屏（如 720p）和超长屏机的排版数值可能仍需微调
 
 ## 致谢
 

@@ -87,6 +87,15 @@ public class ShelfPage extends LinearLayout {
         });
         wrap.addView(grid, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
+        // 列宽必须由我们自己算：GridView 在 NO_STRETCH 下不会替 item 定宽
+        grid.setColumnWidth(adapter.cellWidth());
+        grid.addOnLayoutChangeListener((v, l, t, r, b, ol, ot, or, ob) -> {
+            int w = r - l;
+            if (w > 0 && w != or - ol) {
+                adapter.setCellWidth(w);
+                grid.setColumnWidth(adapter.cellWidth());
+            }
+        });
 
         emptyView = buildEmpty();
         wrap.addView(emptyView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -257,6 +266,7 @@ public class ShelfPage extends LinearLayout {
         adapter.setItems(list);
         countLabel.setText(list.isEmpty() ? "还没有书" : ("共 " + list.size() + " 本"));
         grid.setNumColumns(p.shelfColumns());
+        grid.setColumnWidth(adapter.cellWidth());
 
         Book recent = null;
         long best = 0;

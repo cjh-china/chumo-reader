@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -32,6 +33,30 @@ public class BookAdapter extends BaseAdapter {
     public BookAdapter(Context c) {
         this.c = c;
         this.lib = Library.get(c);
+        // 先用屏幕宽度算一版，保证首帧就有合理宽度（此刻 GridView 还没测量）
+        setCellWidth(c.getResources().getDisplayMetrics().widthPixels);
+    }
+
+    /** 单元格宽度，ShelfPage 用它同步 GridView.setColumnWidth。 */
+    public int cellWidth() {
+        return cellW;
+    }
+
+    /** 按可用宽度重算单元格；Grid 宽高变化时由 ShelfPage 调用。 */
+    public void setCellWidth(int parentWidth) {
+        if (parentWidth <= 0) {
+            return;
+        }
+        int pad = Ui.dp(c, 18);
+        int gap = Ui.dp(c, 12);
+        int avail = parentWidth - pad * 2 - gap * (columns - 1);
+        int w = Math.max(1, avail / columns);
+        if (w == cellW) {
+            return;
+        }
+        cellW = w;
+        coverH = (int) (cellW * 1.38f);
+        notifyDataSetChanged();
     }
 
     public void setItems(List<Book> list) {
@@ -43,6 +68,7 @@ public class BookAdapter extends BaseAdapter {
         if (n != columns) {
             columns = n;
             cellW = 0;
+            setCellWidth(c.getResources().getDisplayMetrics().widthPixels);
             notifyDataSetChanged();
         }
     }
@@ -66,21 +92,12 @@ public class BookAdapter extends BaseAdapter {
         return position;
     }
 
-    private void measureIfNeeded(int parentWidth) {
-        if (cellW > 0 || parentWidth <= 0) {
-            return;
-        }
-        int pad = Ui.dp(c, 18);
-        int gap = Ui.dp(c, 12);
-        int avail = parentWidth - pad * 2 - gap * (columns - 1);
-        cellW = Math.max(1, avail / columns);
-        coverH = (int) (cellW * 1.38f);
-    }
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        measureIfNeeded(parent.getWidth() > 0 ? parent.getWidth()
-                : c.getResources().getDisplayMetrics().widthPixels);
+        if (parent.getWidth() > 0 && Math.abs(cellW - (parent.getWidth()
+                - Ui.dp(c, 18) * 2 - Ui.dp(c, 12) * (columns - 1)) / columns) > 1) {
+            setCellWidth(parent.getWidth());
+        }
         Holder h;
         LinearLayout item;
         if (convertView == null) {
@@ -123,12 +140,12 @@ public class BookAdapter extends BaseAdapter {
             h = (Holder) item.getTag();
         }
 
-        if (cellW > 0) {
-            LinearLayout.LayoutParams blp = (LinearLayout.LayoutParams) h.box.getLayoutParams();
-            blp.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            blp.height = coverH;
-            h.box.setLayoutParams(blp);
-        }
+        // 关键：item 必须显式给宽度。WRAP_CONTENT + 子视图 MATCH_PARENT 会让整格量成 0 宽
+        item.setLayoutParams(new AbsListView.LayoutParams(cellW, ViewGroup.LayoutParams.WRAP_CONTENT));
+        LinearLayout.LayoutParams blp = (LinearLayout.LayoutParams) h.box.getLayoutParams();
+        blp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        blp.height = coverH;
+        h.box.setLayoutParams(blp);
 
         Book b = items.get(position);
         h.title.setTextColor(Ui.attrColor(c, R.attr.appTextPrimary));

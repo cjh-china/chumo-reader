@@ -33,6 +33,10 @@ public final class CoverLoader {
     }
 
     public static Bitmap peek(String key) {
+        // LruCache.get(null) 会直接抛 NullPointerException，没有封面的书 coverPath 就是 null
+        if (key == null || key.length() == 0) {
+            return null;
+        }
         return CACHE.get(key);
     }
 
